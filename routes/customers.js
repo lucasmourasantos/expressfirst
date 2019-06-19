@@ -10,10 +10,10 @@ router.get('/', function(req, res, next) {
 
         if(err){
          req.flash('error', err);
-         res.render('customers',{page_title:"Customers - Node.js",data:''});
+         res.render('index',{page_title:"Customers - Node.js",data:''});
         }else{
 
-            res.render('customers',{page_title:"Customers - Node.js",data:rows});
+            res.render('index',{page_title:"Customers - Node.js",data:rows});
         }
 
          });
@@ -24,7 +24,7 @@ router.get('/', function(req, res, next) {
 // SHOW ADD USER FORM
 router.get('/add', function(req, res, next){
     // render to views/user/add.ejs
-    res.render('customers/add', {
+    res.render('add', {
         title: 'Add New Customers',
         name: '',
         email: ''
@@ -52,14 +52,14 @@ router.post('/add', function(req, res, next){
                     req.flash('error', err)
 
                     // render to views/user/add.ejs
-                    res.render('customers/add', {
+                    res.render('add', {
                         title: 'Add New Customer',
                         name: user.name,
                         email: user.email
                     })
                 } else {
                     req.flash('success', 'Data added successfully!');
-                    res.redirect('/customers');
+                    res.redirect('/');
                 }
             })
     }
@@ -74,7 +74,7 @@ router.post('/add', function(req, res, next){
          * Using req.body.name
          * because req.param('name') is deprecated
          */
-        res.render('customers/add', {
+        res.render('add', {
             title: 'Add New Customer',
             name: req.body.name,
             email: req.body.email
@@ -91,11 +91,11 @@ connection.query('SELECT * FROM customers WHERE id = ' + req.params.id, function
             // if user not found
             if (rows.length <= 0) {
                 req.flash('error', 'Customers not found with id = ' + req.params.id)
-                res.redirect('/customers')
+                res.redirect('/')
             }
             else { // if user found
                 // render to views/user/edit.ejs template file
-                res.render('customers/edit', {
+                res.render('edit', {
                     title: 'Edit Customer',
                     //data: rows[0],
                     id: rows[0].id,
@@ -127,7 +127,7 @@ connection.query('UPDATE customers SET ? WHERE id = ' + req.params.id, user, fun
                     req.flash('error', err)
 
                     // render to views/user/add.ejs
-                    res.render('customers/edit', {
+                    res.render('edit', {
                         title: 'Edit Customer',
                         id: req.params.id,
                         name: req.body.name,
@@ -135,7 +135,7 @@ connection.query('UPDATE customers SET ? WHERE id = ' + req.params.id, user, fun
                     })
                 } else {
                     req.flash('success', 'Data updated successfully!');
-                    res.redirect('/customers');
+                    res.redirect('/');
                 }
             })
 
@@ -151,7 +151,7 @@ connection.query('UPDATE customers SET ? WHERE id = ' + req.params.id, user, fun
          * Using req.body.name
          * because req.param('name') is deprecated
          */
-        res.render('customers/edit', {
+        res.render('edit', {
             title: 'Edit Customer',
             id: req.params.id,
             name: req.body.name,
@@ -169,11 +169,11 @@ connection.query('DELETE FROM customers WHERE id = ' + req.params.id, user, func
             if (err) {
                 req.flash('error', err)
                 // redirect to users list page
-                res.redirect('/customers')
+                res.redirect('/')
             } else {
                 req.flash('success', 'Customer deleted successfully! id = ' + req.params.id)
                 // redirect to users list page
-                res.redirect('/customers')
+                res.redirect('/')
             }
         })
    })
